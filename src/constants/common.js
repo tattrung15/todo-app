@@ -1,5 +1,4 @@
-export const RoleEnum = {
-  GUESS: "Guess",
+export const Roles = {
+  GUEST: "Guest",
   USER: "User",
-  ADMIN: "Admin",
 };

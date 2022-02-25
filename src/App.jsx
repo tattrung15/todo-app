@@ -1,27 +1,22 @@
-import logo from "./logo.svg";
 import "./App.scss";
-import { useEffect } from "react";
+import { BrowserRouter as Router, Routes } from "react-router-dom";
+import { guardRoutes } from "./helpers/components.helper";
+import { Roles } from "./constants/common";
+import { routes } from "./app.routes";
 
 function App() {
-  useEffect(() => {
-    console.log(process.env.REACT_APP_BASE_API_URL);
-  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <div className="App">
+          <Routes>
+            {guardRoutes(routes, Roles.USER, {
+              roles: [Roles.USER],
+              redirect: "/sign-in",
+            })}
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 }
