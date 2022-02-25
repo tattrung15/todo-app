@@ -1,7 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.scss";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    console.log(process.env.REACT_APP_BASE_API_URL);
+  }, []);
   return (
     <div className="App">
       <header className="App-header">
