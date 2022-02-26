@@ -1,9 +1,9 @@
 import HttpService from "./http.service";
 
-class AuthService extends HttpService {
+class _AuthService extends HttpService {
   async login(username, password) {
     try {
-      const response = await this.post("/auth/login", {
+      const response = await this.post("/login", {
         body: {
           username,
           password,
@@ -15,6 +15,36 @@ class AuthService extends HttpService {
       throw new Error(error.message);
     }
   }
+
+  async signUp(username, password) {
+    try {
+      const response = await this.post("/signup", {
+        body: {
+          username,
+          password,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async validateToken(token) {
+    try {
+      const response = await this.post("/validate", {
+        body: {
+          jwt: token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
-export default new AuthService();
+const AuthService = new _AuthService();
+export default AuthService;

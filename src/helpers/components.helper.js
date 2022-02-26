@@ -20,7 +20,7 @@ const groupRoutes = (routes = []) => {
 export const guardRoutes = (routes, role, config = null) => {
   const guardedRoutes = routes.map((route) => {
     let isAllow = true;
-    let redirect = "/login";
+    let redirect = "/sign-in";
 
     if (config) {
       isAllow = config.roles.includes(role);

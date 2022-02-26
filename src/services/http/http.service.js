@@ -36,10 +36,10 @@ class HttpService {
   }
 
   generateHttpHeaders(headerInfo = {}) {
-    const { token } = JSON.parse(localStorage.getItem("persist:auth"));
+    const token = localStorage.getItem("access_token") || "";
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${JSON.parse(token)}`,
+      Authorization: `Bearer ${token}`,
     };
 
     for (const key of Object.keys(headerInfo)) {

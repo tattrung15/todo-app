@@ -7,7 +7,7 @@ export const routes = [
     path: "/",
     component: TodoList,
     config: {
-      roles: [Roles.GUEST, Roles.USER],
+      roles: [Roles.USER],
       redirect: "/sign-in",
     },
   },
