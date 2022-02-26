@@ -19,11 +19,10 @@ function TodoList() {
     <div className="container m-5 p-2 rounded mx-auto bg-light shadow">
       <div className="row m-1 p-4">
         <div className="col">
-          <p
-            className="d-flex justify-content-end text-decoration-underline text-primary btn-logout"
-            onClick={handleLogout}
-          >
-            Log out
+          <p className="d-flex justify-content-end text-decoration-underline text-primary">
+            <span className="btn-logout" onClick={handleLogout}>
+              Log out
+            </span>
           </p>
           <div className="p-1 h1 text-primary text-center mx-auto display-inline-block">
             <i className="fa fa-check bg-primary text-white rounded p-2 mx-2"></i>
