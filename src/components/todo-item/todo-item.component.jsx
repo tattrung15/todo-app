@@ -1,9 +1,28 @@
 import { Checkbox, Popconfirm, Tooltip } from "antd";
 import moment from "moment";
+import { useState } from "react";
 import { DEFAULT_DATE_FORMAT, TODO_STATUS } from "../../constants/common";
+import TodoService from "../../services/http/todo.service";
+import {
+  NotificationType,
+  openNotification,
+} from "../../services/notification.service";
 
 function TodoItem(props) {
   const { todo, deleteTodo } = props;
+  const [isDone, setIsDone] = useState(todo.status);
+
+  const handleChangeStatus = () => {
+    const newStatus =
+      isDone === TODO_STATUS.DONE ? TODO_STATUS.UN_DONE : TODO_STATUS.DONE;
+    TodoService.changeStatus(todo.id, newStatus)
+      .then(() => {
+        setIsDone(newStatus);
+      })
+      .catch(() => {
+        openNotification(NotificationType.ERROR)("Change status failed");
+      });
+  };
 
   return (
     <div className="row px-3 align-items-center todo-item rounded">
@@ -11,13 +30,11 @@ function TodoItem(props) {
         <Tooltip
           placement="bottom"
           title={
-            todo.status === TODO_STATUS.DONE
-              ? "Mark as todo"
-              : "Mark as complete"
+            isDone === TODO_STATUS.DONE ? "Mark as todo" : "Mark as complete"
           }
         >
           <div>
-            <Checkbox checked={todo.status === TODO_STATUS.DONE} />
+            <Checkbox checked={isDone} onChange={handleChangeStatus} />
           </div>
         </Tooltip>
       </div>

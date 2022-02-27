@@ -15,6 +15,10 @@ class HttpService {
     return await this.request("PUT", uri, options);
   }
 
+  async patch(uri, options = { headers: {}, params: {}, body: {} }) {
+    return await this.request("PATCH", uri, options);
+  }
+
   async delete(uri, options = { headers: {}, params: {}, body: {} }) {
     return await this.request("DELETE", uri, options);
   }

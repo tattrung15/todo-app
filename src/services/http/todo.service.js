@@ -25,6 +25,20 @@ class _TodoService extends HttpService {
     }
   }
 
+  async changeStatus(todoId, status) {
+    try {
+      const response = await this.patch(`/todos/${todoId}/status`, {
+        body: {
+          status,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async deleteTodo(todoId) {
     try {
       const response = await this.delete(`/todos/${todoId}`);
