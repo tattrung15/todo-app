@@ -1,5 +1,6 @@
 import axios from "axios";
 import { isNullOrUndefined, isStrEmpty } from "../../helpers/helpers";
+import StorageService from "../storage.service";
 
 class HttpService {
   async get(uri, options = { headers: {}, params: {}, body: {} }) {
@@ -36,7 +37,7 @@ class HttpService {
   }
 
   generateHttpHeaders(headerInfo = {}) {
-    const token = localStorage.getItem("access_token") || "";
+    const token = StorageService.get("access_token") || "";
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

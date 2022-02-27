@@ -1,4 +1,29 @@
-function AddTodo() {
+import { useState } from "react";
+import { DatePicker, Button } from "antd";
+import moment from "moment";
+
+function AddTodo(props) {
+  const { addTodo } = props;
+
+  const [todo, setTodo] = useState({
+    title: "",
+    dueDate: "",
+  });
+
+  const onDatePickerChange = (date, dateString) => {
+    setTodo({
+      ...todo,
+      dueDate: dateString,
+    });
+  };
+
+  const onChange = (event) => {
+    setTodo({
+      ...todo,
+      title: event.target.value,
+    });
+  };
+
   return (
     <div className="col col-11 mx-auto">
       <div className="row bg-white rounded shadow-sm p-2 add-todo-wrapper align-items-center justify-content-center">
@@ -7,29 +32,28 @@ function AddTodo() {
             className="form-control form-control-lg border-0 add-todo-input bg-transparent rounded"
             type="text"
             placeholder="Add new .."
+            onChange={onChange}
+            value={todo.title}
           />
         </div>
         <div className="col-auto m-0 px-2 d-flex align-items-center">
-          <label className="text-secondary my-2 p-0 px-1 view-opt-label due-date-label d-none">
-            Due date not set
-          </label>
-          <i
-            className="fa fa-calendar my-2 px-1 text-primary btn due-date-button"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Set a Due date"
-          ></i>
-          <i
-            className="fa fa-calendar-times-o my-2 px-1 text-danger btn clear-due-date-button d-none"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Clear Due date"
-          ></i>
+          <DatePicker
+            className="mx-2"
+            onChange={onDatePickerChange}
+            placeholder="Set due date"
+            value={todo.dueDate ? moment(todo.dueDate) : ""}
+          />
         </div>
         <div className="col-auto px-0 mx-0 mr-2">
-          <button type="button" className="btn btn-primary">
+          <Button
+            type="primary"
+            onClick={() => {
+              addTodo(todo);
+              setTodo({ title: "", dueDate: "" });
+            }}
+          >
             Add
-          </button>
+          </Button>
         </div>
       </div>
     </div>

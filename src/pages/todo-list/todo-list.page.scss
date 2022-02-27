@@ -1,12 +1,11 @@
 .add-todo-input,
 .edit-todo-input {
   outline: none;
-}
 
-.add-todo-input:focus,
-.edit-todo-input:focus {
-  border: none !important;
-  box-shadow: none !important;
+  &:focus {
+    border: none !important;
+    box-shadow: none !important;
+  }
 }
 
 .view-opt-label,
@@ -22,8 +21,12 @@
   visibility: hidden !important;
 }
 
-.todo-item:hover .todo-actions {
-  visibility: visible !important;
+.todo-item:hover {
+  background: rgb(238, 238, 238);
+
+  .todo-actions {
+    visibility: visible !important;
+  }
 }
 
 .todo-item.editing .todo-actions .edit-icon {

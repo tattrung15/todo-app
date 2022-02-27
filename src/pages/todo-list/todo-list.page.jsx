@@ -1,19 +1,68 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddTodo from "../../components/todo-add/todo-add.component";
-import TodoFilter from "../../components/todo-filter/todo-filter.component";
 import TodoItem from "../../components/todo-item/todo-item.component";
 import { Roles } from "../../constants/common";
+import TodoService from "../../services/http/todo.service";
 import StorageService from "../../services/storage.service";
 import "./todo-list.page.scss";
+import {
+  NotificationType,
+  openNotification,
+} from "../../services/notification.service";
 
 function TodoList() {
   const navigate = useNavigate();
+  const [todos, setTodos] = useState([]);
 
   const handleLogout = () => {
     StorageService.set("role", Roles.GUEST);
     StorageService.set("access_token", "");
     navigate("/sign-in");
   };
+
+  const addTodo = (todo) => {
+    const newTodo = {
+      title: todo.title,
+      ...(todo.dueDate ? { dueDate: todo.dueDate } : {}),
+    };
+
+    const [...currTodos] = todos;
+
+    TodoService.createTodo(newTodo)
+      .then((response) => {
+        currTodos.unshift(response.result.data);
+        setTodos(currTodos);
+        openNotification(NotificationType.SUCCESS)("Create success");
+      })
+      .catch(() => {
+        openNotification(NotificationType.ERROR)("Create failed");
+      });
+  };
+
+  const deleteTodo = (todo) => {
+    const [...currTodos] = todos;
+
+    TodoService.deleteTodo(todo.id)
+      .then(() => {
+        const updatedTodos = currTodos.filter((item) => item.id !== todo.id);
+        setTodos(updatedTodos);
+        openNotification(NotificationType.SUCCESS)("Delete success");
+      })
+      .catch(() => {
+        openNotification(NotificationType.ERROR)("Delete failed");
+      });
+  };
+
+  useEffect(() => {
+    TodoService.getList()
+      .then((response) => {
+        setTodos(response.result.data);
+      })
+      .catch(() => {
+        openNotification(NotificationType.ERROR)("Cannot fetch list todos");
+      });
+  }, []);
 
   return (
     <div className="container m-5 p-2 rounded mx-auto bg-light shadow">
@@ -31,18 +80,18 @@ function TodoList() {
         </div>
       </div>
       <div className="row m-1 p-3">
-        <AddTodo />
+        <AddTodo addTodo={addTodo} />
       </div>
       <div className="p-2 mx-4 border-black-25 border-bottom"></div>
       <div className="row m-1 p-3 px-5 justify-content-end">
-        <TodoFilter />
+        {/* <TodoFilter /> */}
       </div>
       <div className="row mx-1 px-5 pb-3 w-80">
         <div className="col mx-auto">
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
-          <TodoItem />
+          {!!todos.length &&
+            todos.map((item, index) => (
+              <TodoItem key={index} todo={item} deleteTodo={deleteTodo} />
+            ))}
         </div>
       </div>
     </div>
