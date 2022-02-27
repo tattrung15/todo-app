@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddTodo from "../../components/todo-add/todo-add.component";
 import TodoItem from "../../components/todo-item/todo-item.component";
+import TodoFilter from "../../components/todo-filter/todo-filter.component";
 import { Roles } from "../../constants/common";
 import TodoService from "../../services/http/todo.service";
 import StorageService from "../../services/storage.service";
@@ -84,7 +85,7 @@ function TodoList() {
       </div>
       <div className="p-2 mx-4 border-black-25 border-bottom"></div>
       <div className="row m-1 p-3 px-5 justify-content-end">
-        {/* <TodoFilter /> */}
+        <TodoFilter />
       </div>
       <div className="row mx-1 px-5 pb-3 w-80">
         <div className="col mx-auto">

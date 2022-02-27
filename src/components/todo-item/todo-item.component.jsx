@@ -54,11 +54,13 @@ function TodoItem(props) {
             <div className="col-auto d-flex align-items-center rounded bg-white border border-warning">
               <Tooltip placement="bottom" title="Due on date">
                 <i
-                  className="fa fa-hourglass-2 my-0 px-2 text-warning btn"
+                  className="fa fa-hourglass-2 my-2 px-2 text-warning"
                   data-toggle="tooltip"
                 ></i>
               </Tooltip>
-              <h6 className="text my-0 pr-2">28th Jun 2020</h6>
+              <h6 className="text my-2 pr-2">
+                {moment(todo.dueDate).format(DEFAULT_DATE_FORMAT)}
+              </h6>
             </div>
           </div>
         </div>
