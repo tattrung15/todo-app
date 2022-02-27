@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DatePicker, Button } from "antd";
 import moment from "moment";
 
-function AddTodo(props) {
+function TodoAdd(props) {
   const { addTodo } = props;
 
   const [todo, setTodo] = useState({
@@ -17,7 +17,7 @@ function AddTodo(props) {
     });
   };
 
-  const onChange = (event) => {
+  const onInputChange = (event) => {
     setTodo({
       ...todo,
       title: event.target.value,
@@ -32,7 +32,7 @@ function AddTodo(props) {
             className="form-control form-control-lg border-0 add-todo-input bg-transparent rounded"
             type="text"
             placeholder="Add new .."
-            onChange={onChange}
+            onChange={onInputChange}
             value={todo.title}
           />
         </div>
@@ -60,4 +60,4 @@ function AddTodo(props) {
   );
 }
 
-export default AddTodo;
+export default TodoAdd;
