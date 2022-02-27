@@ -24,10 +24,12 @@ class HttpService {
   }
 
   async request(method, uri, options = { headers: {}, params: {}, body: {} }) {
+    const queryParams = this.generateHttpParams(options.params);
+    const url = this.resolveUri(uri) + `?${queryParams}`;
+
     return await axios.request({
       method,
-      url: this.resolveUri(uri),
-      params: this.generateHttpParams(options.params),
+      url,
       headers: this.generateHttpHeaders(options.headers),
       data: options.body,
     });

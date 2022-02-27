@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import TodoAdd from "../../components/todo-add/todo-add.component";
 import TodoItem from "../../components/todo-item/todo-item.component";
 import TodoFilter from "../../components/todo-filter/todo-filter.component";
-import { Roles } from "../../constants/common";
+import { Roles, TODO_STATUS } from "../../constants/common";
 import TodoService from "../../services/http/todo.service";
 import StorageService from "../../services/storage.service";
 import "./todo-list.page.scss";
@@ -11,6 +11,7 @@ import {
   NotificationType,
   openNotification,
 } from "../../services/notification.service";
+import { FILTER, SORT } from "../../constants/common";
 
 function TodoList() {
   const navigate = useNavigate();
@@ -55,14 +56,58 @@ function TodoList() {
       });
   };
 
-  useEffect(() => {
-    TodoService.getList()
+  const getListTodo = (filter = "", sort = "") => {
+    const params = {};
+
+    switch (filter) {
+      case FILTER.COMPLETED:
+        params.equal = {
+          status: TODO_STATUS.DONE,
+        };
+        break;
+      case FILTER.ACTIVE:
+        params.equal = {
+          status: TODO_STATUS.UN_DONE,
+        };
+        break;
+      case FILTER.HAS_DUE_DATE:
+        params.dueDate = true;
+        break;
+      default:
+        params.equal = {};
+    }
+
+    switch (sort) {
+      case SORT.CREATED_AT_ASC:
+        params.sort = {
+          createdAt: "asc",
+        };
+        break;
+      case SORT.CREATED_AT_DESC:
+        params.sort = {
+          createdAt: "desc",
+        };
+        break;
+      case SORT.DUE_DATE_ASC:
+        params.sort = {
+          dueDate: "asc",
+        };
+        break;
+      default:
+        params.sort = {};
+    }
+
+    TodoService.getList(params)
       .then((response) => {
         setTodos(response.result.data);
       })
       .catch(() => {
         openNotification(NotificationType.ERROR)("Cannot fetch list todos");
       });
+  };
+
+  useEffect(() => {
+    getListTodo();
   }, []);
 
   return (
@@ -85,7 +130,7 @@ function TodoList() {
       </div>
       <div className="p-2 mx-4 border-black-25 border-bottom"></div>
       <div className="row m-1 p-3 px-5 justify-content-end">
-        {/* <TodoFilter /> */}
+        <TodoFilter getListTodo={getListTodo} />
       </div>
       <div className="row mx-1 px-5 pb-3 w-80">
         <div className="col mx-auto">

@@ -1,38 +1,68 @@
-function TodoFilter() {
+import clsx from "clsx";
+import { useState } from "react";
+import { FILTER, SORT } from "../../constants/common";
+
+function TodoFilter(props) {
+  const { getListTodo } = props;
+
+  const [isAsc, setIsAsc] = useState(false);
+  const [filter, setFilter] = useState(FILTER.ALL);
+  const [sort, setSort] = useState(SORT.CREATED_AT_DESC);
+
+  const onFilterChange = (event) => {
+    const value = event.target.value;
+    setFilter(value);
+    getListTodo(value, sort);
+  };
+
+  const onSortSelectChange = (event) => {
+    const value = event.target.value;
+    setSort(value);
+    getListTodo(filter, value);
+  };
+
+  const onSortClick = () => {
+    const value = !isAsc ? SORT.CREATED_AT_ASC : SORT.CREATED_AT_DESC;
+    setIsAsc(!isAsc);
+    getListTodo(filter, value);
+  };
+
   return (
     <>
       <div className="col-auto d-flex align-items-center">
         <label className="text-secondary my-2 mx-2 view-opt-label">
           Filter
         </label>
-        <select className="form-select">
-          <option value="all" selected>
-            All
-          </option>
-          <option value="completed">Completed</option>
-          <option value="active">Active</option>
-          <option value="has-due-date">Has due date</option>
+        <select
+          value={filter}
+          className="form-select"
+          onChange={onFilterChange}
+        >
+          <option value={FILTER.ALL}>All</option>
+          <option value={FILTER.COMPLETED}>Completed</option>
+          <option value={FILTER.ACTIVE}>Active</option>
+          <option value={FILTER.HAS_DUE_DATE}>Has due date</option>
         </select>
       </div>
       <div className="col-auto d-flex align-items-center px-1 pr-3">
         <label className="text-secondary my-2 mx-2 view-opt-label">Sort</label>
-        <select className="form-select">
-          <option value="added-date-asc" selected>
-            Added date
-          </option>
-          <option value="due-date-desc">Due date</option>
+        <select
+          className="form-select"
+          value={sort}
+          onChange={onSortSelectChange}
+        >
+          <option value={SORT.CREATED_AT_DESC}>Added date</option>
+          <option value={SORT.DUE_DATE_ASC}>Due date</option>
         </select>
         <i
-          className="fa fa fa-sort-amount-asc text-info btn mx-2 px-0 pl-1"
+          className={clsx("fa fa text-info btn mx-2 px-0 pl-1", {
+            "fa-sort-amount-asc": isAsc,
+            "fa-sort-amount-desc": !isAsc,
+          })}
           data-toggle="tooltip"
           data-placement="bottom"
-          title="Ascending"
-        ></i>
-        <i
-          className="fa fa fa-sort-amount-desc text-info btn mx-2 px-0 pl-1 d-none"
-          data-toggle="tooltip"
-          data-placement="bottom"
-          title="Descending"
+          title={isAsc ? "Ascending" : "Descending"}
+          onClick={onSortClick}
         ></i>
       </div>
     </>

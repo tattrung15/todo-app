@@ -1,7 +1,7 @@
-import { Checkbox, DatePicker, Popconfirm, Tooltip } from "antd";
-import moment from "moment";
 import { useState } from "react";
+import moment from "moment";
 import clsx from "clsx";
+import { Checkbox, DatePicker, Popconfirm, Tooltip } from "antd";
 import { DEFAULT_DATE_FORMAT, TODO_STATUS } from "../../constants/common";
 import TodoService from "../../services/http/todo.service";
 import {
@@ -73,11 +73,13 @@ function TodoItem(props) {
         <Tooltip
           placement="bottom"
           title={
-            isDone === TODO_STATUS.DONE ? "Mark as todo" : "Mark as complete"
+            todo.status === TODO_STATUS.DONE
+              ? "Mark as todo"
+              : "Mark as complete"
           }
         >
           <div>
-            <Checkbox checked={isDone} onChange={handleChangeStatus} />
+            <Checkbox checked={todo.status} onChange={handleChangeStatus} />
           </div>
         </Tooltip>
       </div>
@@ -93,42 +95,34 @@ function TodoItem(props) {
               }
             )}
             readOnly={!isEdit}
-            value={todoEdit.title}
+            value={todo.title}
             onChange={onInputChange}
           />
         </Tooltip>
       </div>
-      {todoEdit.dueDate && !isEdit && (
+      {todo.dueDate && !isEdit && (
         <div className="col-auto m-0 p-0 px-2">
           <div className="row">
             <div
               className={clsx(
                 "col-auto d-flex align-items-center rounded bg-white border",
                 {
-                  "border-warning": moment(todoEdit.dueDate).isAfter(
-                    new Date()
-                  ),
-                  "border-danger": moment(todoEdit.dueDate).isBefore(
-                    new Date()
-                  ),
+                  "border-warning": moment(todo.dueDate).isAfter(new Date()),
+                  "border-danger": moment(todo.dueDate).isBefore(new Date()),
                 }
               )}
             >
               <Tooltip placement="bottom" title="Due on date">
                 <i
                   className={clsx("fa fa-hourglass-2 my-2 px-2", {
-                    "text-warning": moment(todoEdit.dueDate).isAfter(
-                      new Date()
-                    ),
-                    "text-danger": moment(todoEdit.dueDate).isBefore(
-                      new Date()
-                    ),
+                    "text-warning": moment(todo.dueDate).isAfter(new Date()),
+                    "text-danger": moment(todo.dueDate).isBefore(new Date()),
                   })}
                   data-toggle="tooltip"
                 ></i>
               </Tooltip>
               <h6 className="text my-2 pr-2">
-                {moment(todoEdit.dueDate).format(DEFAULT_DATE_FORMAT)}
+                {moment(todo.dueDate).format(DEFAULT_DATE_FORMAT)}
               </h6>
             </div>
           </div>
@@ -141,7 +135,7 @@ function TodoItem(props) {
               className="mx-2"
               onChange={onDatePickerChange}
               placeholder="Update due date"
-              value={todoEdit.dueDate ? moment(todoEdit.dueDate) : ""}
+              value={todo.dueDate ? moment(todo.dueDate) : ""}
             />
           </div>
         </div>
