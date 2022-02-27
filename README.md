@@ -6,10 +6,17 @@ Link back-end [Todo API](https://github.com/tattrung15/todo-api).
 
 `REACT_APP_BASE_API_URL`=http://localhost:5000/api
 
-### `yarn start`
+- Install dependencies:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  ```
+  yarn install
+  ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Start app
+
+  ```
+  yarn start
+  ```
+
+  Runs the app in the development mode.\
+  Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
