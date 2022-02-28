@@ -38,8 +38,9 @@ function TodoList() {
         setTodos(currTodos);
         openNotification(NotificationType.SUCCESS)("Create success");
       })
-      .catch(() => {
-        openNotification(NotificationType.ERROR)("Create failed");
+      .catch((e) => {
+        const { message } = e.response.data;
+        openNotification(NotificationType.ERROR)(message);
       });
   };
 
@@ -52,8 +53,9 @@ function TodoList() {
         setTodos(updatedTodos);
         openNotification(NotificationType.SUCCESS)("Delete success");
       })
-      .catch(() => {
-        openNotification(NotificationType.ERROR)("Delete failed");
+      .catch((e) => {
+        const { message } = e.response.data;
+        openNotification(NotificationType.ERROR)(message);
       });
   };
 
@@ -66,8 +68,9 @@ function TodoList() {
       .then((response) => {
         setTodos(response.result.data);
       })
-      .catch(() => {
-        openNotification(NotificationType.ERROR)("Cannot fetch list todos");
+      .catch((e) => {
+        const { message } = e.response.data;
+        openNotification(NotificationType.ERROR)(message);
       });
   };
 

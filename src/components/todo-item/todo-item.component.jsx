@@ -37,8 +37,9 @@ function TodoItem(props) {
           status: newStatus,
         });
       })
-      .catch(() => {
-        openNotification(NotificationType.ERROR)("Change status failed");
+      .catch((e) => {
+        const { message } = e.response.data;
+        openNotification(NotificationType.ERROR)(message);
       });
   };
 
@@ -67,8 +68,9 @@ function TodoItem(props) {
         setEdit(false);
         openNotification(NotificationType.SUCCESS)("Update success");
       })
-      .catch(() => {
-        openNotification(NotificationType.ERROR)("Update failed");
+      .catch((e) => {
+        const { message } = e.response.data;
+        openNotification(NotificationType.ERROR)(message);
       });
   };
 

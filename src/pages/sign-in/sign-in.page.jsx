@@ -57,10 +57,8 @@ function SignIn() {
       dispatch(storeUser(result.user));
       navigate("/");
     }).catch((e) => {
-      const errorMsg = isLogin
-        ? "Incorrect username or password"
-        : "Username already exists";
-      setError(errorMsg);
+      const { message } = e.response.data;
+      setError(message);
       StorageService.set("role", Roles.GUEST);
       StorageService.set("access_token", "");
       dispatch(clearUser());
