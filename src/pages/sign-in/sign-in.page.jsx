@@ -85,7 +85,7 @@ function SignIn() {
             <input
               type="email"
               className="form-control"
-              placeholder="Enter email"
+              placeholder="Enter username"
               name="username"
               onChange={handleInputChange}
             />
@@ -106,7 +106,7 @@ function SignIn() {
               <input
                 type="password"
                 className="form-control"
-                placeholder="Enter password"
+                placeholder="Enter re-password"
                 name="rePassword"
                 onChange={handleInputChange}
               />
