@@ -81,7 +81,7 @@ function SignIn() {
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form>
-          <h3>{isLogin ? "Log In" : "Sign Up"}</h3>
+          <h3>{isLogin ? "Sign In" : "Sign Up"}</h3>
           <div className="form-group mb-3">
             <label className="mb-2">Username</label>
             <input
@@ -121,7 +121,7 @@ function SignIn() {
               className="btn btn-primary btn-block"
               onClick={handleSubmit}
             >
-              {isLogin ? "Log In" : "Sign Up"}
+              {isLogin ? "Sign In" : "Sign Up"}
             </button>
           </div>
         </form>
@@ -129,7 +129,7 @@ function SignIn() {
           className="d-flex justify-content-end text-decoration-underline text-primary btn-logout"
           onClick={handleChangeStatus}
         >
-          {isLogin ? "Sign Up" : "Log In"}
+          {isLogin ? "Sign Up" : "Sign In"}
         </p>
       </div>
     </div>
