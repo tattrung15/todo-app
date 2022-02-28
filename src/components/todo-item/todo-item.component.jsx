@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import clsx from "clsx";
 import { Checkbox, DatePicker, Popconfirm, Tooltip } from "antd";
@@ -8,24 +8,34 @@ import {
   NotificationType,
   openNotification,
 } from "../../services/notification.service";
+import { useStateFromProp } from "../../hooks/use-state-from-prop.hook";
 
 function TodoItem(props) {
   const { todo, deleteTodo } = props;
-  const [isDone, setIsDone] = useState(todo.status);
   const [isEdit, setEdit] = useState(false);
-  const [todoEdit, setTodoEdit] = useState({
-    title: todo.title,
-    dueDate: todo.dueDate
+  const [todoState] = useStateFromProp(() => {
+    todo.dueDate = todo.dueDate
       ? moment(todo.dueDate).format(DEFAULT_DATE_FORMAT)
-      : "",
+      : "";
+    return todo;
   });
+  const [todoEdit, setTodoEdit] = useState(todoState);
+
+  useEffect(() => {
+    setTodoEdit(todoState);
+  }, [todoState]);
 
   const handleChangeStatus = () => {
     const newStatus =
-      isDone === TODO_STATUS.DONE ? TODO_STATUS.UN_DONE : TODO_STATUS.DONE;
+      todoEdit.status === TODO_STATUS.DONE
+        ? TODO_STATUS.UN_DONE
+        : TODO_STATUS.DONE;
     TodoService.changeStatus(todo.id, newStatus)
       .then(() => {
-        setIsDone(newStatus);
+        setTodoEdit({
+          ...todoEdit,
+          status: newStatus,
+        });
       })
       .catch(() => {
         openNotification(NotificationType.ERROR)("Change status failed");
@@ -64,7 +74,7 @@ function TodoItem(props) {
 
   const cancelUpdate = () => {
     setEdit(false);
-    setTodoEdit({ title: todo.title, dueDate: todo.dueDate });
+    setTodoEdit(todoState);
   };
 
   return (
@@ -73,13 +83,13 @@ function TodoItem(props) {
         <Tooltip
           placement="bottom"
           title={
-            todo.status === TODO_STATUS.DONE
+            todoEdit.status === TODO_STATUS.DONE
               ? "Mark as todo"
               : "Mark as complete"
           }
         >
           <div>
-            <Checkbox checked={todo.status} onChange={handleChangeStatus} />
+            <Checkbox checked={todoEdit.status} onChange={handleChangeStatus} />
           </div>
         </Tooltip>
       </div>
@@ -95,34 +105,42 @@ function TodoItem(props) {
               }
             )}
             readOnly={!isEdit}
-            value={todo.title}
+            value={todoEdit.title}
             onChange={onInputChange}
           />
         </Tooltip>
       </div>
-      {todo.dueDate && !isEdit && (
+      {todoEdit.dueDate && !isEdit && (
         <div className="col-auto m-0 p-0 px-2">
           <div className="row">
             <div
               className={clsx(
                 "col-auto d-flex align-items-center rounded bg-white border",
                 {
-                  "border-warning": moment(todo.dueDate).isAfter(new Date()),
-                  "border-danger": moment(todo.dueDate).isBefore(new Date()),
+                  "border-warning": moment(todoEdit.dueDate).isAfter(
+                    new Date()
+                  ),
+                  "border-danger": moment(todoEdit.dueDate).isBefore(
+                    new Date()
+                  ),
                 }
               )}
             >
               <Tooltip placement="bottom" title="Due on date">
                 <i
                   className={clsx("fa fa-hourglass-2 my-2 px-2", {
-                    "text-warning": moment(todo.dueDate).isAfter(new Date()),
-                    "text-danger": moment(todo.dueDate).isBefore(new Date()),
+                    "text-warning": moment(todoEdit.dueDate).isAfter(
+                      new Date()
+                    ),
+                    "text-danger": moment(todoEdit.dueDate).isBefore(
+                      new Date()
+                    ),
                   })}
                   data-toggle="tooltip"
                 ></i>
               </Tooltip>
               <h6 className="text my-2 pr-2">
-                {moment(todo.dueDate).format(DEFAULT_DATE_FORMAT)}
+                {moment(todoEdit.dueDate).format(DEFAULT_DATE_FORMAT)}
               </h6>
             </div>
           </div>
@@ -135,7 +153,7 @@ function TodoItem(props) {
               className="mx-2"
               onChange={onDatePickerChange}
               placeholder="Update due date"
-              value={todo.dueDate ? moment(todo.dueDate) : ""}
+              value={todoEdit.dueDate ? moment(todoEdit.dueDate) : ""}
             />
           </div>
         </div>

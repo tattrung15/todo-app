@@ -24,7 +24,7 @@ function TodoFilter(props) {
   const onSortClick = () => {
     const value = !isAsc ? SORT.CREATED_AT_ASC : SORT.CREATED_AT_DESC;
     setIsAsc(!isAsc);
-    getListTodo(filter, value);
+    getListTodo(filter, sort, value);
   };
 
   return (
@@ -61,7 +61,7 @@ function TodoFilter(props) {
           })}
           data-toggle="tooltip"
           data-placement="bottom"
-          title={isAsc ? "Ascending" : "Descending"}
+          title={isAsc ? "Ascending by created at" : "Descending by created at"}
           onClick={onSortClick}
         ></i>
       </div>
